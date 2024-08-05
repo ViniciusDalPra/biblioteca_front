@@ -3,28 +3,44 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@popperjs/core/dist/cjs/popper.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import Menu from './componentes/Menu'
 import Home from './componentes/telas/Home'
 import Genero from "./componentes/telas/genero/Genero";
 import Livro from "./componentes/telas/livro/Livro";
+import Login from "./componentes/telas/login/Login";
+import MenuPublico from "./componentes/MenuPublico";
+import MenuPrivado from "./componentes/MenuPrivado";
 
 const router = createBrowserRouter([
   {
     path : "/",
-    element : <Menu/>,
+    element : <MenuPublico/>,
     children : [
       {
         index : true,
         element : <Home/>
       },
       {
-        path : "Generos",
-        element : <Genero/>
-      }
-      ,
+        path : "login",
+        element :  <Login/>
+      }              
+    ]
+  }
+  ,
+  {
+    path: "/privado",
+    element: <MenuPrivado />,
+    children: [
       {
-        path : "livros",
-        element : <Livro/>
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "generos",
+        element: <Genero />,
+      },
+      {
+        path: "livros",
+        element: <Livro />,
       }
     ]
   }

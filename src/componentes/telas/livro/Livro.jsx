@@ -9,7 +9,11 @@ import Tabela from "./Tabela";
 import Form from "./Form";
 import Carregando from "../../comuns/Carregando";
 
+import { useNavigate } from "react-router-dom";
+
 function Livro() {
+
+    let navigate = useNavigate();
 
     const [alerta, setAlerta] = useState({ status: "", message: "" });
     const [listaObjetos, setListaObjetos] = useState([]);
@@ -34,9 +38,14 @@ function Livro() {
     }
 
     const editarObjeto = async codigo => {
+        try{
         setObjeto(await getLivroPorCodigoAPI(codigo));
         setEditar(true);
         setAlerta({ status: "", message: "" });
+        }catch (err){
+            window.location.reload();
+            navigate("/login", { replace: true });
+        }
     }
 
     const acaoCadastrar = async e => {
@@ -51,6 +60,7 @@ function Livro() {
             }
         } catch (err) {
             console.log(err);
+            navigate("/login", { replace: true });
         }
         recuperaLivros();
     }
@@ -64,9 +74,14 @@ function Livro() {
     const [carregando, setCarregando] = useState(false);
 
     const recuperaLivros = async () => {
+        try{
         setCarregando(true);
         setListaObjetos(await getLivrosAPI());
         setCarregando(false);
+        }catch (err){
+            window.location.reload();
+            navigate("/login", { replace: true });
+        }
     }
 
     const recuperaGeneros = async () => {
@@ -75,9 +90,14 @@ function Livro() {
 
     const remover = async codigo => {
         if (window.confirm('Deseja remover este objeto?')) {
+            try{
             let retornoAPI = await deleteLivroAPI(codigo);
             setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
             recuperaLivros();
+            }catch (err){
+                window.location.reload();
+                navigate("/login", { replace: true });
+            }
         }
     }
 

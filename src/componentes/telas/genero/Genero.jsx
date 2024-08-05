@@ -7,8 +7,11 @@ import {
 import Tabela from "./Tabela";
 import Form from "./Form";
 import Carregando from "../../comuns/Carregando";
+import { useNavigate } from "react-router-dom";
 
 function Genero() {
+
+    let navigate = useNavigate();
 
     const [alerta, setAlerta] = useState({ status: "", message: "" });
     const [listaObjetos, setListaObjetos] = useState([]);
@@ -25,9 +28,14 @@ function Genero() {
     }
 
     const editarObjeto = async codigo => {
+        try{
         setObjeto(await getGeneroPorCodigoAPI(codigo));
         setEditar(true);
         setAlerta({ status: "", message: "" });
+        }catch (err){
+            window.location.reload();
+            navigate("/login", { replace: true });
+        }
     }
 
     const acaoCadastrar = async e => {
@@ -42,6 +50,7 @@ function Genero() {
             }
         } catch (err) {
             console.log(err);
+            navigate("/login", { replace: true });
         }
         recuperaGeneros();
     }
@@ -55,16 +64,27 @@ function Genero() {
     const [carregando, setCarregando] = useState(false);
 
     const recuperaGeneros = async () => {
+        try{
         setCarregando(true);
         setListaObjetos(await getGenerosAPI());
         setCarregando(false);
+        }catch (err){
+            window.location.reload();
+            navigate("/login", { replace: true });
+        }
     }
 
     const remover = async codigo => {
+        
         if (window.confirm('Deseja remover este objeto?')) {
+            try{
             let retornoAPI = await deleteGeneroAPI(codigo);
             setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
             recuperaGeneros();
+            }catch (err) {
+                window.location.reload();
+                navigate("/login", { replace: true });
+            }
         }
     }
 
